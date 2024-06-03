@@ -8,6 +8,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(PCL REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(visualization_msgs REQUIRED)
@@ -33,20 +34,24 @@ add_executable(path_creation src/4_point_path_drawing.cpp)
 target_link_libraries(path_creation ${PCL_LIBRARIES})
 
 add_executable(kitti_voxel src/5_kitti_data_voxel.cpp)
-ament_target_dependencies(kitti_voxel rclcpp sensor_msgs pcl_conversions)
+ament_target_dependencies(kitti_voxel rclcpp sensor_msgs std_msgs pcl_conversions)
 target_link_libraries(kitti_voxel ${PCL_LIBRARIES})
 
 add_executable(kd_tree src/6_kd_tree.cpp)
 # ament_target_dependencies(kd_tree rclcpp sensor_msgs pcl_conversions)
 target_link_libraries(kd_tree ${PCL_LIBRARIES})
 
+add_executable(pcl_accept src/accept_pcl.cpp)
+ament_target_dependencies(pcl_accept rclcpp sensor_msgs std_msgs pcl_conversions visualization_msgs)
+target_link_libraries(pcl_accept ${PCL_LIBRARIES})
 
 add_executable(traffic_segmentation src/7_traffic_segmentation.cpp)
 ament_target_dependencies(traffic_segmentation rclcpp sensor_msgs pcl_conversions visualization_msgs)
 target_link_libraries(traffic_segmentation ${PCL_LIBRARIES})
 
+
 install(TARGETS
-  pcd_import plane_cloud circular_cloud filtering_segmentation  path_creation kitti_voxel kd_tree traffic_segmentation
+  pcd_import plane_cloud circular_cloud filtering_segmentation  path_creation pcl_accept kitti_voxel kd_tree traffic_segmentation 
   DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY
@@ -56,4 +61,3 @@ install(DIRECTORY
 )
 
 ament_package()
-
